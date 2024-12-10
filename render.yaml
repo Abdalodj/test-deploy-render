@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: easy-portfolio-api
+    runtime: php
+    repo: https://github.com/bakeli-OpenSource/easy-portfolio-api
+    branch: dev
+    plan: free
+    envVars:
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: DB_CONNECTION
+        sync: false
+      - key: APP_KEY
+        sync: false
+    region: oregon
+    buildCommand: |
+      curl -sS https://getcomposer.org/installer | php
+      mv composer.phar /usr/local/bin/composer
+      composer install
+      php artisan key:generate
+      php artisan config:cache
+      php artisan route:cache
+    startCommand: php artisan serve --host 0.0.0.0 --port 8000
+version: "1"
